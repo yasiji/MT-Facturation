@@ -1,6 +1,6 @@
 # MT-Facturation API Reference (v1)
 
-Last Updated: 2026-02-19 21:36 UTC
+Last Updated: 2026-02-20 12:06 UTC
 Base Prefix: `/api/v1`
 
 ## Global Conventions
@@ -504,3 +504,4 @@ Base Prefix: `/api/v1`
   - overdue invoice count
   - total outstanding
   - outstanding totals by aging bucket.
+

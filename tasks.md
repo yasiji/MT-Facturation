@@ -1,6 +1,6 @@
 # MT-Facturation - Execution Plan (Chronological)
 
-Last Updated: 2026-02-20 11:46 UTC
+Last Updated: 2026-02-20 12:06 UTC
 
 ## Recurring Rule - Documentation Synchronization (Every Interaction/Iteration)
 Objective: preserve project continuity and avoid context loss.
@@ -11,6 +11,7 @@ Tasks:
 - [x] Record the updates in `journal.md` with outcomes and rationale.
 - [x] Keep API reference documentation synchronized in `docs/api-reference.md`.
 - [x] Keep process-oriented API map synchronized in `docs/api-process-map.md`.
+- [x] Regenerate `docs/api-reference-table.pdf` with per-endpoint curl command syntax.
 
 Exit criteria:
 - [x] Documentation is synchronized for the current interaction/iteration.
@@ -51,7 +52,7 @@ Tasks:
 - [x] Set up CI pipeline skeleton for lint + test + build.
 - [x] Define branching and pull request policy.
 - [x] Initialize local git repository baseline (`main`) with first snapshot commit for GitHub migration.
-- [ ] Create/push remote GitHub repository (`MT-Facturation`) - blocked by PAT scope (`403` repo create denied), pending token permission update or manual empty-repo creation.
+- [x] Create/push remote GitHub repository (`MT-Facturation`) and sync `main` branch with GitHub.
 - [x] Correct local Codex GitHub MCP configuration to use environment-variable binding (`bearer_token_env_var = \"GITHUB_TOKEN\"`) instead of raw token literal.
 
 Exit criteria:
@@ -394,5 +395,8 @@ Exit criteria:
 - [x] Moroccan mobile/landline numbering rules are enforced and persisted safely.
 - [x] Contract PDF is generated and downloadable after successful confirmation.
 - [x] All required unit, integration, API-contract, frontend, and E2E tests pass.
+
+
+
 
 

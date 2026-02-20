@@ -1,6 +1,6 @@
 # MT-Facturation - Technical Stack and Engineering Standards
 
-Last Updated: 2026-02-20 11:46 UTC
+Last Updated: 2026-02-20 12:06 UTC
 
 ## 1) Core Stack
 - Backend: Python 3.12+
@@ -297,5 +297,7 @@ Frontend:
 - `infra/`: local PostgreSQL dev/test docker compose setup.
 - `docs/`: glossary, release criteria, workflow, decision log, branching policy, API reference (`docs/api-reference.md`), process API map (`docs/api-process-map.md`), and PDF artifacts (`docs/api-reference-table.pdf`, `docs/api-process-map.pdf`).
 - `.github/workflows/ci.yml`: baseline CI for backend/frontend quality gates.
+
+
 
 

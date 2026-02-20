@@ -19,6 +19,11 @@ SOURCE = ROOT / "docs" / "api-reference.md"
 OUTPUT = ROOT / "docs" / "api-reference-table.pdf"
 
 ENDPOINT_HEADER_RE = re.compile(r"^###\s+(GET|POST|PUT|DELETE|PATCH)\s+`([^`]+)`")
+PATH_PARAM_RE = re.compile(r"\{([^}]+)\}")
+
+DEFAULT_BASE_URL = "http://192.168.10.9:8000"
+DEFAULT_AUTH_TOKEN = "launch-smoke:admin,ops"
+DEFAULT_IDEMPOTENCY_KEY = "demo-key-12345678"
 
 
 def _clean_inline_code(value: str) -> str:
@@ -47,6 +52,39 @@ def _collect_bullet_block(lines: list[str], start: int) -> tuple[list[str], int]
     return items, idx
 
 
+def _command_endpoint(endpoint: str) -> str:
+    normalized = PATH_PARAM_RE.sub(lambda m: f"<{m.group(1)}>", endpoint)
+    normalized = normalized.replace("...", "<value>")
+    return normalized
+
+
+def _build_curl_syntax(
+    method: str,
+    endpoint: str,
+    auth: str,
+    inputs: str,
+) -> str:
+    url = f"{DEFAULT_BASE_URL}{_command_endpoint(endpoint)}"
+    parts: list[str] = ["curl"]
+
+    if method != "GET":
+        parts.extend(["-X", method])
+
+    auth_required = auth.lower().startswith("required")
+    if auth_required:
+        parts.extend(["-H", f'"Authorization: Bearer {DEFAULT_AUTH_TOKEN}"'])
+
+    if "Idempotency-Key" in inputs:
+        parts.extend(["-H", f'"Idempotency-Key: {DEFAULT_IDEMPOTENCY_KEY}"'])
+
+    if method in {"POST", "PUT", "PATCH"}:
+        parts.extend(["-H", '"Content-Type: application/json"'])
+        parts.extend(["-d", '"<JSON_BODY>"'])
+
+    parts.append(f'"{url}"')
+    return " ".join(parts)
+
+
 def parse_api_reference(markdown: str) -> list[dict[str, str]]:
     lines = markdown.splitlines()
     rows: list[dict[str, str]] = []
@@ -59,7 +97,7 @@ def parse_api_reference(markdown: str) -> list[dict[str, str]]:
             continue
 
         method = match.group(1)
-        endpoint = match.group(2).split("?", 1)[0]
+        endpoint = match.group(2)
         row = {
             "method": method,
             "endpoint": endpoint,
@@ -67,6 +105,7 @@ def parse_api_reference(markdown: str) -> list[dict[str, str]]:
             "purpose": "-",
             "inputs": "-",
             "response_rules": "-",
+            "syntax": "-",
         }
         idx += 1
 
@@ -118,6 +157,13 @@ def parse_api_reference(markdown: str) -> list[dict[str, str]]:
             row["inputs"] = "; ".join(inputs)
         if response_rules:
             row["response_rules"] = "; ".join(response_rules)
+
+        row["syntax"] = _build_curl_syntax(
+            method=row["method"],
+            endpoint=row["endpoint"],
+            auth=row["auth"],
+            inputs=row["inputs"],
+        )
         rows.append(row)
 
     return rows
@@ -149,21 +195,23 @@ def build_pdf(rows: list[dict[str, str]], output_path: Path) -> None:
         "Cell",
         parent=styles["BodyText"],
         fontName="Helvetica",
-        fontSize=7.2,
-        leading=9,
+        fontSize=6.4,
+        leading=8,
         textColor=colors.HexColor("#1C2E3E"),
     )
     header_style = ParagraphStyle(
         "HeaderCell",
         parent=cell_style,
         fontName="Helvetica-Bold",
-        fontSize=8,
+        fontSize=7,
         textColor=colors.white,
     )
 
     elements = [
-        Paragraph("MT-Facturation API Reference (Table)", title_style),
+        Paragraph("MT-Facturation API Reference (Table + Command Syntax)", title_style),
         Paragraph(f"Source: {SOURCE.name}", cell_style),
+        Paragraph(f"Base URL used in syntax column: {DEFAULT_BASE_URL}", cell_style),
+        Paragraph(f"Default bearer token used in syntax column: {DEFAULT_AUTH_TOKEN}", cell_style),
         Spacer(1, 8),
     ]
 
@@ -172,6 +220,7 @@ def build_pdf(rows: list[dict[str, str]], output_path: Path) -> None:
             Paragraph("Method", header_style),
             Paragraph("Endpoint", header_style),
             Paragraph("Auth", header_style),
+            Paragraph("Cmd Syntax (curl)", header_style),
             Paragraph("Purpose", header_style),
             Paragraph("Inputs", header_style),
             Paragraph("Response / Rules", header_style),
@@ -184,14 +233,15 @@ def build_pdf(rows: list[dict[str, str]], output_path: Path) -> None:
                 Paragraph(row["method"], cell_style),
                 Paragraph(row["endpoint"], cell_style),
                 Paragraph(row["auth"], cell_style),
+                Paragraph(row["syntax"], cell_style),
                 Paragraph(row["purpose"], cell_style),
                 Paragraph(row["inputs"], cell_style),
                 Paragraph(row["response_rules"], cell_style),
             ],
         )
 
-    # total width ~ 810 including table padding; fits A4 landscape content box.
-    col_widths = [48, 170, 68, 160, 165, 185]
+    # Fits A4 landscape content width (842 - 32 margins = 810 points).
+    col_widths = [40, 160, 52, 250, 120, 90, 98]
     table = Table(table_data, colWidths=col_widths, repeatRows=1)
     table.setStyle(
         TableStyle(
@@ -200,10 +250,10 @@ def build_pdf(rows: list[dict[str, str]], output_path: Path) -> None:
                 ("GRID", (0, 0), (-1, -1), 0.35, colors.HexColor("#AFC4D1")),
                 ("VALIGN", (0, 0), (-1, -1), "TOP"),
                 ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F4F8FA")]),
-                ("LEFTPADDING", (0, 0), (-1, -1), 4),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 4),
-                ("TOPPADDING", (0, 0), (-1, -1), 3),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+                ("LEFTPADDING", (0, 0), (-1, -1), 3),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 3),
+                ("TOPPADDING", (0, 0), (-1, -1), 2),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
             ],
         ),
     )
@@ -224,4 +274,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

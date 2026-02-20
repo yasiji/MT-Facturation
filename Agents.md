@@ -1,6 +1,6 @@
 # MT-Facturation - Project Charter and Operating Rules
 
-Last Updated: 2026-02-20 11:46 UTC
+Last Updated: 2026-02-20 12:06 UTC
 
 ## 1) Mission
 Build a production-grade telecom management system that covers:
@@ -183,5 +183,7 @@ The system is release-ready when:
   - `frontend/` (React + TypeScript + Vite template + tests + domain management UI, including contract-first intake routing for new/existing clients, invoice center, and collections dashboard operations)
   - `infra/docker-compose.yml` (local PostgreSQL dev/test)
   - `.github/workflows/ci.yml` (CI skeleton)
+
+
 
 

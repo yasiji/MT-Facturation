@@ -3204,3 +3204,44 @@ Risks/Blockers:
 
 Next Steps:
 - On Linux run: `chmod +x stop_all.sh && ./stop_all.sh`.
+## [2026-02-20 12:06 UTC] Session Entry
+Author: Codex Agent
+Context:
+- User requested that the API PDF include exact ready-to-run syntax (like the provided curl auth examples) for every endpoint.
+
+Actions:
+- Updated `docs/generate_api_reference_pdf.py` to add per-endpoint `Cmd Syntax (curl)` generation.
+- Syntax generation rules now apply automatically for all parsed endpoints:
+  - base URL: `http://192.168.10.9:8000`
+  - auth header added on protected endpoints: `Authorization: Bearer launch-smoke:admin,ops`
+  - idempotency header added where required: `Idempotency-Key: demo-key-12345678`
+  - JSON write methods include `Content-Type: application/json` and `-d <JSON_BODY>` placeholder
+  - path/query placeholders normalized for runnable command templates.
+- Regenerated PDF artifact:
+  - `docs/api-reference-table.pdf`
+  - parser output rows: `51` endpoints.
+- Updated iteration metadata in markdown control docs and refreshed `tasks.md` status for completed GitHub sync plus this PDF syntax regeneration.
+
+Decisions:
+- Kept syntax values explicit and copyable for teammate handoff consistency.
+- Embedded defaults in PDF header to remove ambiguity about IP/token used in commands.
+
+Files Changed:
+- docs/generate_api_reference_pdf.py
+- docs/api-reference-table.pdf
+- docs/api-reference.md
+- mustread.md
+- Agents.md
+- tasks.md
+- stack.md
+- journal.md
+
+Tests:
+- `backend/.venv/Scripts/python.exe docs/generate_api_reference_pdf.py`: pass
+- PDF output verified by file timestamp/size update.
+
+Risks/Blockers:
+- Command syntax defaults are environment-specific (`192.168.10.9`, dev token). If server IP or auth policy changes, regenerate the PDF.
+
+Next Steps:
+- If desired, I can generate a second variant using host placeholders (`http://<HOST>:8000`) for sharing outside your LAN.
