@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 from reportlab.lib import colors  # type: ignore[import-untyped]
@@ -17,6 +18,61 @@ from reportlab.platypus import (  # type: ignore[import-untyped]
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "docs" / "api-process-map.md"
 OUTPUT = ROOT / "docs" / "api-process-map.pdf"
+
+DEFAULT_BASE_URL = "http://192.168.10.9:8000"
+DEFAULT_AUTH_TOKEN = "launch-smoke:admin,ops"
+DEFAULT_IDEMPOTENCY_KEY = "demo-key-12345678"
+
+METHOD_ENDPOINT_RE = re.compile(r"(GET|POST|PUT|DELETE|PATCH)\s+(/api/v1/[A-Za-z0-9_./{}?=&-]+)")
+PATH_PARAM_RE = re.compile(r"\{([^}]+)\}")
+IDEMPOTENT_PATHS = {
+    "/api/v1/landing/submit/new",
+    "/api/v1/landing/submit/plan-change",
+    "/api/v1/billing/runs",
+    "/api/v1/collections/payments",
+    "/api/v1/collections/invoices/{invoice_id}/approve-paid",
+}
+
+
+def extract_endpoint(text: str) -> tuple[str, str] | None:
+    normalized = text.replace("`", "")
+    match = METHOD_ENDPOINT_RE.search(normalized)
+    if not match:
+        return None
+    method = match.group(1)
+    endpoint = match.group(2).rstrip(").,;")
+    return method, endpoint
+
+
+def endpoint_to_command_path(endpoint: str) -> str:
+    normalized = PATH_PARAM_RE.sub(lambda m: f"<{m.group(1)}>", endpoint)
+    return normalized.replace("...", "<value>")
+
+
+def is_public_endpoint(endpoint: str) -> bool:
+    return endpoint == "/api/v1/health" or endpoint.startswith("/api/v1/landing/")
+
+
+def needs_idempotency(endpoint: str) -> bool:
+    return endpoint.split("?", 1)[0] in IDEMPOTENT_PATHS
+
+
+def build_curl_command(method: str, endpoint: str) -> str:
+    command_parts: list[str] = ["curl"]
+    if method != "GET":
+        command_parts.extend(["-X", method])
+    if not is_public_endpoint(endpoint):
+        command_parts.extend(["-H", f'"Authorization: Bearer {DEFAULT_AUTH_TOKEN}"'])
+    if needs_idempotency(endpoint):
+        command_parts.extend(["-H", f'"Idempotency-Key: {DEFAULT_IDEMPOTENCY_KEY}"'])
+    if method in {"POST", "PUT", "PATCH"}:
+        command_parts.extend(["-H", '"Content-Type: application/json"', "-d", '"<JSON_BODY>"'])
+    command_parts.append(f'"{DEFAULT_BASE_URL}{endpoint_to_command_path(endpoint)}"')
+    return " ".join(command_parts)
+
+
+def as_html(value: str) -> str:
+    return value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
 def markdown_to_flowables(markdown: str) -> list[object]:
@@ -67,6 +123,13 @@ def markdown_to_flowables(markdown: str) -> list[object]:
         borderWidth=0.3,
         borderPadding=4,
     )
+    cmd_style = ParagraphStyle(
+        "Cmd",
+        parent=code_style,
+        fontSize=8,
+        leading=10,
+        spaceAfter=0,
+    )
 
     flowables: list[object] = []
     lines = markdown.splitlines()
@@ -79,7 +142,20 @@ def markdown_to_flowables(markdown: str) -> list[object]:
         nonlocal bullet_items
         if not bullet_items:
             return
-        items = [ListItem(Paragraph(item, body_style), leftIndent=4) for item in bullet_items]
+        items: list[ListItem] = []
+        for item in bullet_items:
+            endpoint = extract_endpoint(item)
+            if endpoint:
+                method, path = endpoint
+                command = build_curl_command(method, path)
+                items.append(
+                    ListItem(
+                        [Paragraph(item, body_style), Paragraph(as_html(command), cmd_style)],
+                        leftIndent=4,
+                    ),
+                )
+            else:
+                items.append(ListItem(Paragraph(item, body_style), leftIndent=4))
         flowables.append(
             ListFlowable(
                 items,
@@ -140,7 +216,13 @@ def markdown_to_flowables(markdown: str) -> list[object]:
         elif stripped.startswith("### "):
             flowables.append(Paragraph(stripped[4:], h3_style))
         else:
-            flowables.append(Paragraph(stripped.replace("`", ""), body_style))
+            line = stripped.replace("`", "")
+            flowables.append(Paragraph(line, body_style))
+            endpoint = extract_endpoint(line)
+            if endpoint:
+                method, path = endpoint
+                command = build_curl_command(method, path)
+                flowables.append(Paragraph(as_html(command), cmd_style))
         idx += 1
 
     flush_bullets()
@@ -166,4 +248,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

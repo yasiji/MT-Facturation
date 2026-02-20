@@ -3245,3 +3245,43 @@ Risks/Blockers:
 
 Next Steps:
 - If desired, I can generate a second variant using host placeholders (`http://<HOST>:8000`) for sharing outside your LAN.
+## [2026-02-20 12:14 UTC] Session Entry
+Author: Codex Agent
+Context:
+- User requested applying the same command-syntax treatment to the other API PDF artifact (process map PDF).
+
+Actions:
+- Updated `docs/generate_api_process_map_pdf.py` to auto-attach runnable `curl` commands for detected endpoints across process steps.
+- Added command generation rules in process-map PDF pipeline:
+  - base URL: `http://192.168.10.9:8000`
+  - auth header on protected endpoints: `Authorization: Bearer launch-smoke:admin,ops`
+  - idempotency header on critical writes: `Idempotency-Key: demo-key-12345678`
+  - JSON write methods include `Content-Type: application/json` + `-d <JSON_BODY>` placeholder.
+- Updated source process map metadata and defaults section:
+  - `docs/api-process-map.md` (timestamp + Command Syntax Defaults section).
+- Regenerated output artifact:
+  - `docs/api-process-map.pdf`.
+- Synchronized required project markdown control files (`mustread.md`, `Agents.md`, `tasks.md`, `stack.md`).
+
+Decisions:
+- Implemented command rendering at generator level so future process-map PDF refreshes keep syntax automatically aligned.
+
+Files Changed:
+- docs/generate_api_process_map_pdf.py
+- docs/api-process-map.md
+- docs/api-process-map.pdf
+- mustread.md
+- Agents.md
+- tasks.md
+- stack.md
+- journal.md
+
+Tests:
+- `backend/.venv/Scripts/python.exe docs/generate_api_process_map_pdf.py`: pass
+- PDF output verified by updated file timestamp/size.
+
+Risks/Blockers:
+- Command syntax defaults are LAN-specific (`192.168.10.9`) and dev-auth specific; regenerate when deployment host/auth changes.
+
+Next Steps:
+- If requested, push this update to GitHub immediately so Linux clone has the refreshed process-map PDF.

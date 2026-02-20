@@ -1,6 +1,6 @@
 # MT-Facturation - Project Charter and Operating Rules
 
-Last Updated: 2026-02-20 12:06 UTC
+Last Updated: 2026-02-20 12:14 UTC
 
 ## 1) Mission
 Build a production-grade telecom management system that covers:

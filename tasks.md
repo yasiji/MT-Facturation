@@ -1,6 +1,6 @@
 # MT-Facturation - Execution Plan (Chronological)
 
-Last Updated: 2026-02-20 12:06 UTC
+Last Updated: 2026-02-20 12:14 UTC
 
 ## Recurring Rule - Documentation Synchronization (Every Interaction/Iteration)
 Objective: preserve project continuity and avoid context loss.
@@ -12,6 +12,7 @@ Tasks:
 - [x] Keep API reference documentation synchronized in `docs/api-reference.md`.
 - [x] Keep process-oriented API map synchronized in `docs/api-process-map.md`.
 - [x] Regenerate `docs/api-reference-table.pdf` with per-endpoint curl command syntax.
+- [x] Regenerate `docs/api-process-map.pdf` with per-step curl command syntax.
 
 Exit criteria:
 - [x] Documentation is synchronized for the current interaction/iteration.

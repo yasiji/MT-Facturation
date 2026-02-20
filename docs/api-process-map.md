@@ -1,9 +1,16 @@
 # MT-Facturation API Process Map (Chronological)
 
-Last Updated: 2026-02-20 10:09 UTC
+Last Updated: 2026-02-20 12:12 UTC
 Base Prefix: `/api/v1`
 
 This document maps all platform-supported API workflows in chronological business order, from setup to collections.
+
+## Command Syntax Defaults
+
+- Base URL used in generated command syntax: `http://192.168.10.9:8000`
+- Protected endpoint auth header syntax: `Authorization: Bearer launch-smoke:admin,ops`
+- Write endpoints include `Content-Type: application/json` and placeholder `-d <JSON_BODY>`
+- Idempotent endpoints include header `Idempotency-Key: demo-key-12345678`
 
 ## Global Rules (Apply to All Processes)
 
