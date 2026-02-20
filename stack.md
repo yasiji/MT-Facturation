@@ -1,6 +1,6 @@
 # MT-Facturation - Technical Stack and Engineering Standards
 
-Last Updated: 2026-02-20 10:44 UTC
+Last Updated: 2026-02-20 10:53 UTC
 
 ## 1) Core Stack
 - Backend: Python 3.12+

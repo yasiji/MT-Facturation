@@ -3048,3 +3048,43 @@ Risks/Blockers:
 
 Next Steps:
 - On Linux desktop: run `chmod +x launch_all.sh && ./launch_all.sh` and validate emitted URLs/log paths.
+## [2026-02-20 10:53 UTC] Session Entry
+Author: Codex Agent
+Context:
+- User requested moving the full project to GitHub.
+
+Actions:
+- Checked tooling and auth state:
+  - `git` is available
+  - `gh` (GitHub CLI) is not installed in this environment
+  - no existing `.git` repository was present in project root.
+- Initialized repository locally at project root:
+  - `git init -b main`
+  - configured local author name for commit metadata
+  - staged full workspace and created initial snapshot commit.
+- Verified repo status:
+  - latest commit: `6ad5f82` (`Initial project snapshot`)
+  - working tree clean
+  - no remote configured yet.
+- Synchronized governance markdown timestamps and phase tracking notes for this iteration.
+
+Decisions:
+- Completed all non-credentialed migration steps locally first.
+- Deferred GitHub remote creation/push because account-level authentication and destination repo URL are not available in current shell.
+
+Files Changed:
+- mustread.md
+- Agents.md
+- tasks.md
+- stack.md
+- journal.md
+
+Tests:
+- `git status --short`: pass (clean after commit)
+- `git log --oneline -n 1`: pass (`6ad5f82 Initial project snapshot`)
+
+Risks/Blockers:
+- Cannot push to GitHub until destination repository URL exists and authentication is provided (PAT/credential manager/SSH).
+
+Next Steps:
+- Set remote URL and push `main` once user provides target GitHub repo path or creates an empty repo.

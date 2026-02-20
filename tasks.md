@@ -1,6 +1,6 @@
 # MT-Facturation - Execution Plan (Chronological)
 
-Last Updated: 2026-02-20 10:44 UTC
+Last Updated: 2026-02-20 10:53 UTC
 
 ## Recurring Rule - Documentation Synchronization (Every Interaction/Iteration)
 Objective: preserve project continuity and avoid context loss.
@@ -49,6 +49,7 @@ Tasks:
 - [x] Create and maintain Linux parity launcher `launch_all.sh` with equivalent bootstrap/start/smoke flow.
 - [x] Set up CI pipeline skeleton for lint + test + build.
 - [x] Define branching and pull request policy.
+- [x] Initialize local git repository baseline (`main`) with first snapshot commit for GitHub migration.
 
 Exit criteria:
 - [x] All templates build successfully.
