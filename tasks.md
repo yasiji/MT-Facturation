@@ -1,6 +1,6 @@
 # MT-Facturation - Execution Plan (Chronological)
 
-Last Updated: 2026-02-20 10:53 UTC
+Last Updated: 2026-02-20 11:01 UTC
 
 ## Recurring Rule - Documentation Synchronization (Every Interaction/Iteration)
 Objective: preserve project continuity and avoid context loss.
@@ -50,6 +50,7 @@ Tasks:
 - [x] Set up CI pipeline skeleton for lint + test + build.
 - [x] Define branching and pull request policy.
 - [x] Initialize local git repository baseline (`main`) with first snapshot commit for GitHub migration.
+- [ ] Create/push remote GitHub repository (`MT-Facturation`) - blocked by PAT scope (`403` repo create denied), pending token permission update or manual empty-repo creation.
 
 Exit criteria:
 - [x] All templates build successfully.

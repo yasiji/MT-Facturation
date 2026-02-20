@@ -3088,3 +3088,43 @@ Risks/Blockers:
 
 Next Steps:
 - Set remote URL and push `main` once user provides target GitHub repo path or creates an empty repo.
+## [2026-02-20 11:01 UTC] Session Entry
+Author: Codex Agent
+Context:
+- User reported GitHub MCP was added and requested continuation of GitHub migration.
+
+Actions:
+- Validated MCP state:
+  - `list_mcp_resources` and `list_mcp_resource_templates` returned empty (GitHub MCP not active in current session tool surface).
+- Inspected local Codex config and validated GitHub token usability for API read:
+  - authenticated user confirmed as `yasiji`
+  - repository read/list operations succeeded.
+- Attempted automated GitHub repo creation for `MT-Facturation` via REST API:
+  - `POST /user/repos` returned `403 Resource not accessible by personal access token`.
+- Verified local git repository remains ready for push:
+  - branch: `main`
+  - commits present (`6ad5f82`, `07178b7`)
+  - working tree clean before this documentation sync.
+- Updated project docs to track blocker and required next action.
+
+Decisions:
+- Keep local repository fully prepared; defer push until token scope allows repository creation or an empty remote repository is created manually.
+
+Files Changed:
+- mustread.md
+- Agents.md
+- tasks.md
+- stack.md
+- journal.md
+
+Tests:
+- GitHub API auth check (`GET /user`): pass
+- GitHub repo existence check (`GET /repos/yasiji/MT-Facturation`): pass (404 not found)
+- GitHub repo creation (`POST /user/repos`): blocked (`403` token scope)
+
+Risks/Blockers:
+- Current token cannot create repositories.
+- Current Codex config uses `bearer_token_env_var` with what appears to be a raw token value; recommended to rotate token and store it in a real environment variable name.
+
+Next Steps:
+- Either (1) grant token permission to create repos, or (2) create empty `yasiji/MT-Facturation` repository manually, then run remote add + push.
