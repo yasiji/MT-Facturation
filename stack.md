@@ -1,6 +1,6 @@
 # MT-Facturation - Technical Stack and Engineering Standards
 
-Last Updated: 2026-02-20 11:01 UTC
+Last Updated: 2026-02-20 11:06 UTC
 
 ## 1) Core Stack
 - Backend: Python 3.12+
@@ -241,6 +241,7 @@ Frontend:
 - Input validation on all APIs.
 - Rate limiting on sensitive endpoints.
 - Audit logging for critical business events.
+- Local MCP integrations must reference secret environment variable names (e.g., `GITHUB_TOKEN`) and never inline raw tokens in config files.
 
 ## 11) Deployment Baseline
 - Containerization: Docker for all services.

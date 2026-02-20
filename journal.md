@@ -3128,3 +3128,43 @@ Risks/Blockers:
 
 Next Steps:
 - Either (1) grant token permission to create repos, or (2) create empty `yasiji/MT-Facturation` repository manually, then run remote add + push.
+## [2026-02-20 11:06 UTC] Session Entry
+Author: Codex Agent
+Context:
+- User requested to fix GitHub MCP configuration and make it work.
+
+Actions:
+- Repaired Codex config at `C:\Users\yassi\.codex\config.toml`:
+  - replaced invalid raw-token literal in `bearer_token_env_var` with proper variable binding:
+    - `bearer_token_env_var = "GITHUB_TOKEN"`
+- Migrated existing token value into user environment variable storage:
+  - set user env var `GITHUB_TOKEN` (non-empty, length validated).
+- Verified post-fix state:
+  - config reflects environment variable binding
+  - user env var present.
+- Checked live MCP availability in current session:
+  - `list_mcp_resources` / templates still do not expose `github`
+  - explicit query returns `unknown MCP server 'github'`.
+
+Decisions:
+- Config + secret binding is now correct on disk and user profile.
+- Remaining step is process reload: Codex session must restart to load updated MCP server registrations.
+
+Files Changed:
+- C:\Users\yassi\.codex\config.toml
+- mustread.md
+- Agents.md
+- tasks.md
+- stack.md
+- journal.md
+
+Tests:
+- Config verification: pass (`bearer_token_env_var = "GITHUB_TOKEN"`)
+- User env verification: pass (`GITHUB_TOKEN` present)
+- MCP discovery in live session: blocked until restart (`unknown MCP server 'github'`).
+
+Risks/Blockers:
+- Current Codex runtime does not hot-reload MCP server config.
+
+Next Steps:
+- Restart Codex/IDE session, then re-run MCP discovery and GitHub push workflow.
