@@ -1,0 +1,58 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 434 >>
+stream
+BT
+/F1 12 Tf
+50 780 Td
+16 TL
+(MT Facturation - Contract Confirmation) Tj
+T*
+(Contract ID: 4bf2caa5-f6df-4483-834d-5b27f2c62617) Tj
+T*
+(CIN: DD12345) Tj
+T*
+(Client: Replay Client) Tj
+T*
+(Service: mobile/mobile) Tj
+T*
+(Offer: Mobile Replay) Tj
+T*
+(Service Identifier: +212631372814) Tj
+T*
+(Monthly Fee: 49.90) Tj
+T*
+(Activation Fee: 10.00) Tj
+T*
+(Start Date: 2026-02-18) Tj
+T*
+(Issued At \(UTC\): 2026-02-18T11:53:05.936720+00:00) Tj
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000000317 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+802
+%%EOF
