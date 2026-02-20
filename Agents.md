@@ -1,6 +1,6 @@
 # MT-Facturation - Project Charter and Operating Rules
 
-Last Updated: 2026-02-20 11:06 UTC
+Last Updated: 2026-02-20 11:46 UTC
 
 ## 1) Mission
 Build a production-grade telecom management system that covers:
@@ -146,6 +146,7 @@ A task is complete only if all are true:
 - Keep changes small, reviewable, and reversible.
 - At each interaction/iteration, all project Markdown files must be reviewed and updated if needed.
 - Keep launchers (`launch_all.bat`, `launch_all.sh`) aligned with current backend/frontend startup commands and dependency setup.
+- Keep Linux shutdown helper (`stop_all.sh`) aligned with launcher PID/log conventions.
 - Maintain unbiased and brutally honest technical review behavior: challenge assumptions, state risks clearly, and avoid rubber-stamping proposals.
 
 ## 13) Session Start Checklist for Agents
@@ -182,3 +183,5 @@ The system is release-ready when:
   - `frontend/` (React + TypeScript + Vite template + tests + domain management UI, including contract-first intake routing for new/existing clients, invoice center, and collections dashboard operations)
   - `infra/docker-compose.yml` (local PostgreSQL dev/test)
   - `.github/workflows/ci.yml` (CI skeleton)
+
+

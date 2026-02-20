@@ -1,6 +1,6 @@
 # MUST READ FIRST - Session Startup Protocol
 
-Last Updated: 2026-02-20 11:06 UTC
+Last Updated: 2026-02-20 11:46 UTC
 
 ## Mandatory Rule
 Before starting any task in this project, every agent/session must read all project control documents.
@@ -25,6 +25,7 @@ Before starting any task in this project, every agent/session must read all proj
 - [ ] Confirm catalog service-component model is respected (Mobile/Internet/Landline with strict component rules and integer-hour quotas).
 - [ ] Confirm current UI mode: single operator workflow and contract-first provisioning path.
 - [ ] Confirm one-shot launchers (`launch_all.bat`, `launch_all.sh`) are still aligned with project structure.
+- [ ] Confirm companion Linux stop script (`stop_all.sh`) is aligned with launcher PID/log conventions.
 - [ ] Confirm launcher stale-process cleanup and post-launch smoke checks are still valid.
 - [ ] Confirm phase foundation artifacts under `docs/` are aligned with current implementation.
 - [ ] Confirm shared backend foundations under `backend/app/common/` remain consistent across services.
@@ -41,8 +42,10 @@ Before starting any task in this project, every agent/session must read all proj
 - [ ] Ensure any architectural decision is documented.
 - [ ] Verify that decisions in this iteration were reviewed critically (not accepted by default) and tradeoffs were stated.
 - [ ] Validate deletion behavior against data-integrity policy (no destructive client deletion when financial/contract history exists).
-- [ ] Ensure launchers (`launch_all.bat`, `launch_all.sh`) remain valid after any structural or dependency change.
+- [ ] Ensure launchers (`launch_all.bat`, `launch_all.sh`) and stopper (`stop_all.sh`) remain valid after any structural or dependency change.
 
 ## Enforcement Note
 This protocol is part of the project governance and must not be skipped.
 Every interaction/iteration must leave synchronized updates across all project Markdown files.
+
+

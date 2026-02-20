@@ -1,6 +1,6 @@
 # MT-Facturation - Technical Stack and Engineering Standards
 
-Last Updated: 2026-02-20 11:06 UTC
+Last Updated: 2026-02-20 11:46 UTC
 
 ## 1) Core Stack
 - Backend: Python 3.12+
@@ -253,6 +253,7 @@ Frontend:
 ## 11.1) Local One-Shot Launcher
 - Required file: `launch_all.bat` at project root.
 - Linux parity file: `launch_all.sh` at project root.
+- Companion stop file: `stop_all.sh` at project root (graceful stop via PID files with fallback process/port cleanup).
 - Responsibilities:
   - bootstrap backend virtual environment if missing
   - install backend and frontend dependencies
@@ -296,3 +297,5 @@ Frontend:
 - `infra/`: local PostgreSQL dev/test docker compose setup.
 - `docs/`: glossary, release criteria, workflow, decision log, branching policy, API reference (`docs/api-reference.md`), process API map (`docs/api-process-map.md`), and PDF artifacts (`docs/api-reference-table.pdf`, `docs/api-process-map.pdf`).
 - `.github/workflows/ci.yml`: baseline CI for backend/frontend quality gates.
+
+

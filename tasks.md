@@ -1,6 +1,6 @@
 # MT-Facturation - Execution Plan (Chronological)
 
-Last Updated: 2026-02-20 11:06 UTC
+Last Updated: 2026-02-20 11:46 UTC
 
 ## Recurring Rule - Documentation Synchronization (Every Interaction/Iteration)
 Objective: preserve project continuity and avoid context loss.
@@ -47,6 +47,7 @@ Tasks:
   - [x] start backend and frontend in one shot
   - [x] run post-launch smoke checks (backend health, authenticated API read, frontend root)
 - [x] Create and maintain Linux parity launcher `launch_all.sh` with equivalent bootstrap/start/smoke flow.
+- [x] Add Linux stop companion script `stop_all.sh` for deterministic shutdown (PID-file first, process/port fallback).
 - [x] Set up CI pipeline skeleton for lint + test + build.
 - [x] Define branching and pull request policy.
 - [x] Initialize local git repository baseline (`main`) with first snapshot commit for GitHub migration.
@@ -393,3 +394,5 @@ Exit criteria:
 - [x] Moroccan mobile/landline numbering rules are enforced and persisted safely.
 - [x] Contract PDF is generated and downloadable after successful confirmation.
 - [x] All required unit, integration, API-contract, frontend, and E2E tests pass.
+
+

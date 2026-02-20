@@ -3168,3 +3168,39 @@ Risks/Blockers:
 
 Next Steps:
 - Restart Codex/IDE session, then re-run MCP discovery and GitHub push workflow.
+## [2026-02-20 11:46 UTC] Session Entry
+Author: Codex Agent
+Context:
+- User requested a one-command Linux shutdown helper because services launched by `launch_all.sh` remain active after terminal exit.
+
+Actions:
+- Added new root script: `stop_all.sh`.
+- Implemented deterministic stop flow:
+  - terminate backend/frontend via PID files in `generated/launch/*.pid`
+  - fallback process matching for uvicorn/npm/vite when pid files are stale/missing
+  - free known launcher ports (`8000`, `8010`, `5173`, `5174`) via `lsof`/`fuser`
+- Synchronized required markdown docs to reflect launcher companion:
+  - `mustread.md`
+  - `Agents.md`
+  - `tasks.md`
+  - `stack.md`
+
+Decisions:
+- Keep shutdown logic separate from launcher script to give operators explicit lifecycle control and avoid accidental process persistence confusion.
+
+Files Changed:
+- stop_all.sh
+- mustread.md
+- Agents.md
+- tasks.md
+- stack.md
+- journal.md
+
+Tests:
+- `bash -n stop_all.sh`: pass
+
+Risks/Blockers:
+- `stop_pattern` fallback can match similarly-shaped local commands; PID-file path remains the primary shutdown mechanism.
+
+Next Steps:
+- On Linux run: `chmod +x stop_all.sh && ./stop_all.sh`.
